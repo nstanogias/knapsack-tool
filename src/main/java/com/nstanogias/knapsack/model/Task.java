@@ -1,8 +1,6 @@
 package com.nstanogias.knapsack.model;
 
 
-import com.nstanogias.knapsack.utils.Status;
-
 public class Task {
     private Long taskId;
     private Timestamps timestamps;
