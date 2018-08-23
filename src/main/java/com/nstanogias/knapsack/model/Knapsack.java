@@ -13,7 +13,6 @@ public class Knapsack {
     private Long task;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @NotNull
     private Problem problem;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -31,6 +30,10 @@ public class Knapsack {
 
     public Long getTask() {
         return task;
+    }
+
+    public void setTask(Long task) {
+        this.task = task;
     }
 
     public Problem getProblem() {
