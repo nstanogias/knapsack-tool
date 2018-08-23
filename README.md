@@ -1,5 +1,8 @@
 # Knapsack Rest Service
 
+## Author:
+Nikolaos Stanogias
+
 ### Steps taken:
 Youtube video to understand the problem and algorithm better.
 https://www.youtube.com/watch?v=8LusJS5-AGo
