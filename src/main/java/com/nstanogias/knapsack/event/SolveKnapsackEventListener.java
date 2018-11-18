@@ -4,8 +4,7 @@ import com.nstanogias.knapsack.model.Knapsack;
 import com.nstanogias.knapsack.model.Solution;
 import com.nstanogias.knapsack.service.KnapsackService;
 import com.nstanogias.knapsack.utils.Status;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
@@ -16,9 +15,8 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
+@Slf4j
 public class SolveKnapsackEventListener implements ApplicationListener<SolveKnapsackEvent> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SolveKnapsackEventListener.class);
 
     @Autowired
     private KnapsackService knapsackService;
@@ -26,7 +24,7 @@ public class SolveKnapsackEventListener implements ApplicationListener<SolveKnap
     @Override
     @Async
     public void onApplicationEvent(SolveKnapsackEvent solveKnapsackEvent) {
-        LOGGER.info("Received knapsack event with task id {}", solveKnapsackEvent.getKnapsack().getTask());
+        log.info("Received knapsack event with task id {}", solveKnapsackEvent.getKnapsack().getTaskId());
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
@@ -41,7 +39,7 @@ public class SolveKnapsackEventListener implements ApplicationListener<SolveKnap
         solveKnapsackEvent.getKnapsack().getTimestamps().setCompleted(finish / 1000L);
         solveKnapsackEvent.getKnapsack().setStatus(Status.COMPLETED.getValue());
         long timeTaken = finish - start;
-        LOGGER.info("Time taken for knapsack with taskId {} in millis is {}", solveKnapsackEvent.getKnapsack().getTask(), timeTaken);
+        log.info("Time taken for knapsack with taskId {} in millis is {}", solveKnapsackEvent.getKnapsack().getTaskId(), timeTaken);
         Solution solution = new Solution(items,timeTaken);
         Knapsack knapsack = solveKnapsackEvent.getKnapsack();
         knapsack.setSolution(solution);
@@ -50,7 +48,7 @@ public class SolveKnapsackEventListener implements ApplicationListener<SolveKnap
 
     //solution from https://github.com/phishman3579/java-algorithms-implementation/blob/master/src/com/jwetherell/algorithms/mathematics/Knapsack.java
     private List<Integer> solveKnapsack(int[] values, int[] weights, int capacity) {
-        LOGGER.info("Executing asynchronously by thread " + Thread.currentThread().getName());
+        log.info("Executing asynchronously by thread " + Thread.currentThread().getName());
         if (weights.length != values.length)
             return null;
 

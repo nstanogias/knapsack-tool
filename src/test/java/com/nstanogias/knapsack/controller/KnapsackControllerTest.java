@@ -2,7 +2,9 @@ package com.nstanogias.knapsack.controller;
 
 import com.nstanogias.knapsack.model.Knapsack;
 import com.nstanogias.knapsack.model.Timestamps;
+import com.nstanogias.knapsack.repository.UserRepository;
 import com.nstanogias.knapsack.service.KnapsackService;
+import com.nstanogias.knapsack.service.NextSequenceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +32,18 @@ public class KnapsackControllerTest {
     @MockBean
     private KnapsackService service;
 
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private NextSequenceService nextSequenceService;
+
     @Test
     @WithMockUser(username = "admin", password = "admin", roles = "ADMIN")
     public void givenKnapsacks_whenGetTasks_thenReturnJsonArray() throws Exception {
 
         Knapsack knapsack = new Knapsack();
-        knapsack.setTask(1L);
+        knapsack.setTaskId(1);
         knapsack.setTimestamps(new Timestamps());
 
         Iterable<Knapsack> allKnapsacks = Arrays.asList(knapsack);

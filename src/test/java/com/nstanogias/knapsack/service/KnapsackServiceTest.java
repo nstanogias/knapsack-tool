@@ -39,12 +39,12 @@ public class KnapsackServiceTest {
     public void setUp() {
         Knapsack knapsack = new Knapsack();
 
-        Mockito.when(knapsackRepository.findById(1L)).thenReturn(Optional.ofNullable(knapsack));
+        Mockito.when(knapsackRepository.findByTaskId(1)).thenReturn(Optional.ofNullable(knapsack));
     }
 
     @Test
     public void whenPersistedThenKnapsackShouldBeFound() {
-        Long task = 1L;
+        Integer task = 1;
         Optional<Knapsack> found = knapsackService.getKnapsack(task);
 
         assertTrue(found.isPresent());

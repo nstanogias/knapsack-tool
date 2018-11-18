@@ -1,7 +1,9 @@
 package com.nstanogias.knapsack.controller;
 
 import com.nstanogias.knapsack.model.*;
+import com.nstanogias.knapsack.repository.UserRepository;
 import com.nstanogias.knapsack.service.KnapsackService;
+import com.nstanogias.knapsack.service.NextSequenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -11,6 +13,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,25 +31,34 @@ public class KnapsackController implements ApplicationContextAware{
     @Autowired
     private KnapsackService knapsackService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private NextSequenceService nextSequenceService;
+
 
     @PostMapping(value = "/tasks", consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasRole('USER')")
     public Task createKnapsackProblem(@RequestBody Problem problem) {
         LOGGER.info("Creating a new knapsack problem...");
 
         Knapsack knapsack = new Knapsack();
         knapsack.setProblem(problem);
+        knapsack.setTaskId(nextSequenceService.getNextSequence("customSequences"));
         knapsack = knapsackService.storeKnapsack(knapsack);
-        LOGGER.info("Created knapsack problem with task id {}", knapsack.getTask());
-        return new Task(knapsack.getTask(),knapsack.getTimestamps(),knapsack.getStatus());
+        LOGGER.info("Created knapsack problem with task id {}", knapsack.getTaskId());
+        return new Task(knapsack.getTaskId(),knapsack.getTimestamps(),knapsack.getStatus());
     }
 
     @GetMapping("/tasks/{task}")
-    public ResponseEntity<Task> getKnapsackStatus(@PathVariable Long task) {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Task> getKnapsackStatus(@PathVariable Integer task) {
         LOGGER.info("Get status of task id {}", task);
 
         Optional<Knapsack> knapsackData = knapsackService.getKnapsack(task);
         if (knapsackData.isPresent()) {
-            return new ResponseEntity<>(new Task(knapsackData.get().getTask(),
+            return new ResponseEntity<>(new Task(knapsackData.get().getTaskId(),
                     knapsackData.get().getTimestamps(),
                     knapsackData.get().getStatus()),
                     HttpStatus.OK);
@@ -56,12 +68,13 @@ public class KnapsackController implements ApplicationContextAware{
     }
 
     @GetMapping("/solutions/{task}")
-    public ResponseEntity<SolutionResponse> getKnapsackSolution(@PathVariable Long task) {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<SolutionResponse> getKnapsackSolution(@PathVariable Integer task) {
         LOGGER.info("Get solution of task id {}", task);
 
         Optional<Knapsack> knapsackData = knapsackService.getKnapsack(task);
         if (knapsackData.isPresent()) {
-            return new ResponseEntity<>(new SolutionResponse(knapsackData.get().getTask(),
+            return new ResponseEntity<>(new SolutionResponse(knapsackData.get().getTaskId(),
                     knapsackData.get().getProblem(),
                     knapsackData.get().getSolution()),
                     HttpStatus.OK);
@@ -71,6 +84,7 @@ public class KnapsackController implements ApplicationContextAware{
     }
 
     @GetMapping("/admin/tasks")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Task> getAllTasks() {
         LOGGER.info("Get all Tasks...");
 
@@ -78,12 +92,13 @@ public class KnapsackController implements ApplicationContextAware{
         Iterable<Knapsack> knapsacks = knapsackService.getAllTasks();
 
         knapsacks.forEach(knapsack -> {
-            list.add(new Task(knapsack.getTask(), knapsack.getTimestamps(), knapsack.getStatus()));
+            list.add(new Task(knapsack.getTaskId(), knapsack.getTimestamps(), knapsack.getStatus()));
         });
         return list;
     }
 
     @PostMapping("/admin/shutdown")
+    @PreAuthorize("hasRole('ADMIN')")
     public void shutDownService() {
         LOGGER.info("Service shutting down...");
         ((ConfigurableApplicationContext) context).close();
