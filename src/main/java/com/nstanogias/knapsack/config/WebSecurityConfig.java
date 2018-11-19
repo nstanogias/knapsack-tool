@@ -34,10 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/ui",
             "/configuration/security",
             "/swagger-ui.html",
-            "/webjars/**",
-            "/knapsack/tasks/**",
-            "/knapsack/solutions/**"
-            // other public endpoints of your API may be appended to this array
+            "/webjars/**"
     };
 
     @Autowired
@@ -87,6 +84,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST)
                     .permitAll()
                 .antMatchers("/api/auth/**")
+                    .permitAll()
+                .antMatchers("/api/knapsack/**")
                     .permitAll()
                 .anyRequest()
                     .authenticated();

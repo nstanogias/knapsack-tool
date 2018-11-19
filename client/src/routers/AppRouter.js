@@ -5,6 +5,8 @@ import Login from '../components/Auth/Login';
 import Register from '../components/Auth/Register';
 import Landing from '../components/Layout/Landing';
 import AddTask from '../components/Task/AddTask';
+import SolutionView from '../components/Task/SolutionView';
+import TaskView from '../components/Task/TaskView';
 import Header from '../components/Layout/Header';
 import Footer from '../components/Layout/Footer';
 import SecuredRoute from '../securityUtils/SecureRoute';
@@ -26,7 +28,9 @@ const AppRouter = () => (
       }
       <Switch>
         <SecuredRoute exact path="/dashboard" component={Dashboard} />
-        <SecuredRoute exact path="/addProject" component={AddTask} />
+        <SecuredRoute exact path="/addTask" component={AddTask} />
+        <SecuredRoute exact path="/solution/:id" component={SolutionView} />
+        <SecuredRoute exact path="/task/:id" component={TaskView} />
       </Switch>
       <Footer/>
     </div>

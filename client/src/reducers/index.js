@@ -5,6 +5,6 @@ import taskReducer from "./taskReducer";
 
 export default combineReducers({
   errors: errorReducer,
-  task: taskReducer,
+  tasks: taskReducer,
   security: securityReducer
 });

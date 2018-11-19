@@ -24,7 +24,7 @@
     "eject": "react-scripts eject"
   },
   "proxy": {
-    "/knapsack": {
+    "/api/knapsack": {
       "target": "http://localhost:8080",
       "ws": true
     },

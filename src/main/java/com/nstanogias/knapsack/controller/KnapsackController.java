@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/knapsack")
+@RequestMapping("/api/knapsack")
 public class KnapsackController implements ApplicationContextAware{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KnapsackController.class);
@@ -39,7 +39,7 @@ public class KnapsackController implements ApplicationContextAware{
 
 
     @PostMapping(value = "/tasks", consumes = "application/json", produces = "application/json")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public Task createKnapsackProblem(@RequestBody Problem problem) {
         LOGGER.info("Creating a new knapsack problem...");
 
@@ -52,7 +52,7 @@ public class KnapsackController implements ApplicationContextAware{
     }
 
     @GetMapping("/tasks/{task}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Task> getKnapsackStatus(@PathVariable Integer task) {
         LOGGER.info("Get status of task id {}", task);
 
@@ -68,7 +68,7 @@ public class KnapsackController implements ApplicationContextAware{
     }
 
     @GetMapping("/solutions/{task}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<SolutionResponse> getKnapsackSolution(@PathVariable Integer task) {
         LOGGER.info("Get solution of task id {}", task);
 
@@ -85,14 +85,14 @@ public class KnapsackController implements ApplicationContextAware{
 
     @GetMapping("/admin/tasks")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Task> getAllTasks() {
+    public List<Knapsack> getAllTasks() {
         LOGGER.info("Get all Tasks...");
 
-        List<Task> list = new ArrayList<>();
+        List<Knapsack> list = new ArrayList<>();
         Iterable<Knapsack> knapsacks = knapsackService.getAllTasks();
 
         knapsacks.forEach(knapsack -> {
-            list.add(new Task(knapsack.getTaskId(), knapsack.getTimestamps(), knapsack.getStatus()));
+            list.add(knapsack);
         });
         return list;
     }

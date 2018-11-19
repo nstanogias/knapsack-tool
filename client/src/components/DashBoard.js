@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {getTasks} from '../actions/knapsackActions';
+import {getTasks} from '../actions/taskActions';
 import {Link} from 'react-router-dom';
 
 class DashBoard extends Component {
@@ -11,7 +11,7 @@ class DashBoard extends Component {
 
   render() {
 
-    const tasks = this.props.tasks;
+    const {tasks} = this.props.tasks;
 
     let tableData = null;
     if(tasks.length > 0) {
@@ -35,9 +35,9 @@ class DashBoard extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-3">
-                <a href="#" className="btn btn-primary btn-block">
+                <Link to="/addTask" className="btn btn-primary btn-block">
                   <i className="fas fa-plus"></i> Add Task
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ class DashBoard extends Component {
                     <h4 className="display-4">
                       <i className="fas fa-pencil-alt"></i> {tasks.length}
                     </h4>
-                    <a href="#" className="btn btn-outline-light btn-sm">View</a>
+                    {/*<a href="#" className="btn btn-outline-light btn-sm">View</a>*/}
                   </div>
                 </div>
               </div>
