@@ -22,7 +22,7 @@ class DashBoard extends Component {
           <td>{task.status === 'completed' ? <Link to={`/solution/${task.taskId}`}>solution</Link> : null}</td>
           <td>
             <a href="#" className="btn btn-secondary">
-              <i className="fas fa-angle-double-right"></i> Details
+              <i className="fas fa-angle-double-right"></i> Times
             </a>
           </td>
         </tr>
