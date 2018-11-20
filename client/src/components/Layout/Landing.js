@@ -2,13 +2,33 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
 
 class Landing extends Component {
+
+  constructor() {
+    super();
+
+    this.state = {
+      modal: true
+    };
+
+    this.toggle = this.toggle.bind(this);
+  }
+
   componentDidMount() {
     if (this.props.security.validToken) {
       this.props.history.push("/dashboard");
     }
   }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
   render() {
     return (
       <div className="landing">
@@ -33,6 +53,18 @@ class Landing extends Component {
             </div>
           </div>
         </div>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>Admin Credentials</ModalHeader>
+          <ModalBody>
+            <div>
+              <p>username: admin@gmail.com</p>
+              <p>password: admin123</p>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggle}>OK</Button>
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }

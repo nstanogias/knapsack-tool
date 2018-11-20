@@ -85,7 +85,7 @@ class DashBoard extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    tasks: state
+    tasks: state.tasks
   };
 };
 

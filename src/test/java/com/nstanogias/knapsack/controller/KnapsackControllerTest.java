@@ -50,7 +50,7 @@ public class KnapsackControllerTest {
 
         given(service.getAllTasks()).willReturn(allKnapsacks);
 
-        mvc.perform(get("/knapsack/admin/tasks")
+        mvc.perform(get("/api/knapsack/admin/tasks")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
