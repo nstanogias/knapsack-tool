@@ -24,3 +24,10 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+/client/node_modules
+/client/.idea
+/client/build
+
+mvnw
+mvnw.cmd
